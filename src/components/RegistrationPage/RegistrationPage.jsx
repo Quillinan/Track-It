@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export default function RegistrationPage() {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <p>registro</p>
+    </PageContainer>
+  );
 }
 
 const PageContainer = styled.div`

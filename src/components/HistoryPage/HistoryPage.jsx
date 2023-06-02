@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export default function HistoryPage() {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <p>historico</p>
+    </PageContainer>
+  );
 }
 
 const PageContainer = styled.div`

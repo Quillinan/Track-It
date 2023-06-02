@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
 export default function HabitsPage() {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <NavContainer>
+        TrackIt <img src={""} alt="icon" />
+      </NavContainer>
+    </PageContainer>
+  );
 }
 
 const PageContainer = styled.div`

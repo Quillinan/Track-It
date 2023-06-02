@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 export default function TodayPage() {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <p>hoje</p>
+    </PageContainer>
+  );
 }
 
 const PageContainer = styled.div`
