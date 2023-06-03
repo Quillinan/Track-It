@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import NavBar from '../NavBar/NavBar';
+import Footer from '../Footer/footer';
 
 export default function HabitsPage() {
   const [selectedDays, setSelectedDays] = useState({
@@ -21,10 +23,7 @@ export default function HabitsPage() {
 
   return (
     <div>
-      <NavContainer>
-        <p>TrackIt</p>
-        <img src={''} alt="icon" />
-      </NavContainer>
+      <NavBar />
       <PageContainer>
         <TitleContainer>
           <p>Meus hábitos</p>
@@ -53,40 +52,13 @@ export default function HabitsPage() {
           começar a trackear!
         </p>
       </PageContainer>
-      <Footer>
-        <p>Hábitos</p>
-        <p>Hoje</p>
-        <p>Histórico</p>
-      </Footer>
+      <Footer />
     </div>
   );
 }
 
-const NavContainer = styled.div`
-  height: 70px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  font-family: 'Playball';
-  font-size: 40px;
-  text-align: center;
-  background: #126ba5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  color: #ffffff;
-  img {
-    margin-right: 18px;
-    border-radius: 98.5px;
-    width: 51px;
-    height: 51px;
-  }
-  p {
-    margin-left: 18px;
-  }
-`;
-
 const PageContainer = styled.div`
+  height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,12 +67,13 @@ const PageContainer = styled.div`
   font-size: 18px;
   background: #f2f2f2;
   color: #666666;
+  overflow-y: auto;
   padding: 0 20px;
 `;
 
 const TitleContainer = styled.div`
   height: 70px;
-  width: calc(100vw - 36px);
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -123,7 +96,7 @@ const BoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(100vw - 38px);
+  width: 100%;
   height: 200px;
   background-color: #ffffff;
   border-radius: 5px;
@@ -169,16 +142,4 @@ const ButtonsContainer = styled.div`
     height: 35px;
     font-size: 16px;
   }
-`;
-
-const Footer = styled.div`
-  font-family: 'Lexend Deca';
-  font-style: normal;
-  font-size: 18px;
-  height: 70px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  background: #ffffff;
 `;
