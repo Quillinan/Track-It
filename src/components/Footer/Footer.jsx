@@ -1,13 +1,28 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export default function Footer() {
+  const navigate = useNavigate();
+
+  const handleHabitsClick = () => {
+    navigate('/habitos');
+  };
+
+  const handleTodayClick = () => {
+    navigate('/hoje');
+  };
+
+  const handleHistoryClick = () => {
+    navigate('/historico');
+  };
+
   return (
     <StyledFooter>
-      <p>Hábitos</p>
+      <p onClick={handleHabitsClick}>Hábitos</p>
       <Circle>
-        <p>Hoje</p>
+        <p onClick={handleTodayClick}>Hoje</p>
       </Circle>
-      <p>Histórico</p>
+      <p onClick={handleHistoryClick}>Histórico</p>
     </StyledFooter>
   );
 }

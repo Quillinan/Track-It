@@ -1,25 +1,25 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate("/cadastro");
+  const handleRegisterClick = () => {
+    navigate('/cadastro');
   };
 
   const handleLoginClick = () => {
-    navigate("/habitos");
+    navigate('/habitos');
   };
 
   return (
     <PageContainer>
-      <img src={"Logo.svg"} alt="logo" />
+      <img src={'Logo.svg'} alt="logo" />
       <FormContainer>
         <input placeholder="email" />
         <input placeholder="senha" />
         <button onClick={handleLoginClick}>Entrar</button>
-        <p onClick={handleClick}>Não tem uma conta? Cadastre-se!</p>
+        <p onClick={handleRegisterClick}>Não tem uma conta? Cadastre-se!</p>
       </FormContainer>
     </PageContainer>
   );
@@ -29,7 +29,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Lexend Deca";
+  font-family: 'Lexend Deca';
   text-align: center;
   background: #ffffff;
   p {

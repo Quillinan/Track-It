@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 export default function RegistrationPage() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleLoginClick = () => {
     navigate('/');
   };
 
@@ -21,7 +21,7 @@ export default function RegistrationPage() {
         <input placeholder="nome" />
         <input placeholder="foto" />
         <button onClick={handleRegistrationClick}>Cadastrar</button>
-        <p onClick={handleClick}>Já tem uma conta? Faça login!</p>
+        <p onClick={handleLoginClick}>Já tem uma conta? Faça login!</p>
       </FormContainer>
     </PageContainer>
   );
