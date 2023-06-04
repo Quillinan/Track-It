@@ -1,25 +1,83 @@
 import styled from 'styled-components';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
 export default function RegistrationPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const { login } = useContext(AuthContext);
 
   const handleLoginClick = () => {
     navigate('/');
   };
 
-  const handleRegistrationClick = () => {
-    navigate('/habitos');
+  console.log(
+    JSON.stringify({
+      email: `${email}`,
+      name: `${name}`,
+      image: `${image}`,
+      password: `${password}`,
+    })
+  );
+
+  const handleRegistrationClick = async () => {
+    try {
+      const response = await fetch(
+        'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+            name,
+            image,
+            password,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        await login(email, password);
+        navigate('/habitos');
+      } else {
+        throw new Error('Erro ao cadastrar');
+      }
+    } catch (error) {
+      console.error('Erro ao cadastrar:', error);
+    }
   };
 
   return (
     <PageContainer>
       <img src={'Logo.svg'} alt="logo" />
       <FormContainer>
-        <input placeholder="email" />
-        <input placeholder="senha" />
-        <input placeholder="nome" />
-        <input placeholder="foto" />
+        <input
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          placeholder="senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          placeholder="nome"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          placeholder="foto"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        />
         <button onClick={handleRegistrationClick}>Cadastrar</button>
         <p onClick={handleLoginClick}>Já tem uma conta? Faça login!</p>
       </FormContainer>

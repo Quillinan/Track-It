@@ -1,8 +1,24 @@
 import styled from 'styled-components';
 import NavBar from '../NavBar/NavBar';
 import Footer from '../Footer/footer';
+import { useContext, useEffect } from 'react';
+import AuthContext from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function TodayPage() {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div>
       <NavBar />

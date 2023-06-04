@@ -1,23 +1,52 @@
 import styled from 'styled-components';
+import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../context/AuthContext';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { user, login } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleRegisterClick = () => {
     navigate('/cadastro');
   };
 
-  const handleLoginClick = () => {
-    navigate('/habitos');
+  const handleLoginClick = async () => {
+    try {
+      const response = await login(email, password);
+
+      if (response.ok) {
+        navigate('/habitos');
+      } else {
+        console.error('Erro ao fazer login:', response.error);
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+    }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/habitos');
+    }
+  }, [user, navigate]);
 
   return (
     <PageContainer>
       <img src={'Logo.svg'} alt="logo" />
       <FormContainer>
-        <input placeholder="email" />
-        <input placeholder="senha" />
+        <input
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          placeholder="senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <button onClick={handleLoginClick}>Entrar</button>
         <p onClick={handleRegisterClick}>Não tem uma conta? Cadastre-se!</p>
       </FormContainer>
@@ -40,7 +69,7 @@ const PageContainer = styled.div`
   }
   img {
     margin-top: 68px;
-    width: calc(100vw - 200px);
+    width: 180px;
   }
 `;
 

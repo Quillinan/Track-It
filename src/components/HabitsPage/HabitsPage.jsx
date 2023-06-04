@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import NavBar from '../NavBar/NavBar';
 import Footer from '../Footer/footer';
+import AuthContext from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function HabitsPage() {
   const [selectedDays, setSelectedDays] = useState({
@@ -13,6 +15,10 @@ export default function HabitsPage() {
     Sábado: false,
     Domingo: false,
   });
+  const [showBox, setShowBox] = useState(false);
+  const [savedHabit, setSavedHabit] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   function handleDayClick(day) {
     setSelectedDays((prevSelectedDays) => ({
@@ -21,36 +27,59 @@ export default function HabitsPage() {
     }));
   }
 
+  const handleAddButton = () => {
+    setShowBox(true);
+  };
+
+  const handleSaveButton = () => {
+    setShowBox(false);
+    setSavedHabit(true);
+  };
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div>
       <NavBar />
       <PageContainer>
         <TitleContainer>
           <p>Meus hábitos</p>
-          <button>+</button>
+          <button onClick={handleAddButton}>+</button>
         </TitleContainer>
-        <BoxContainer>
-          <input placeholder="nome do hábito" />
-          <DaysContainer>
-            {Object.keys(selectedDays).map((day) => (
-              <DayButton
-                key={day}
-                selected={selectedDays[day]}
-                onClick={() => handleDayClick(day)}
-              >
-                {day[0]}
-              </DayButton>
-            ))}
-          </DaysContainer>
-          <ButtonsContainer>
-            <p>Cancelar</p>
-            <button>Salvar</button>
-          </ButtonsContainer>
-        </BoxContainer>
-        <p>
-          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-          começar a trackear!
-        </p>
+        {showBox && (
+          <BoxContainer>
+            <input placeholder="nome do hábito" />
+            <DaysContainer>
+              {Object.keys(selectedDays).map((day) => (
+                <DayButton
+                  key={day}
+                  selected={selectedDays[day]}
+                  onClick={() => handleDayClick(day)}
+                >
+                  {day[0]}
+                </DayButton>
+              ))}
+            </DaysContainer>
+            <ButtonsContainer>
+              <p>Cancelar</p>
+              <button onClick={handleSaveButton}>Salvar</button>
+            </ButtonsContainer>
+          </BoxContainer>
+        )}
+        {!savedHabit && (
+          <p>
+            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+            começar a trackear!
+          </p>
+        )}
       </PageContainer>
       <Footer />
     </div>
