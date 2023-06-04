@@ -15,8 +15,7 @@ export default function HabitsPage() {
     Sábado: false,
     Domingo: false,
   });
-  const [showBox, setShowBox] = useState(false);
-  const [savedHabit, setSavedHabit] = useState(false);
+  const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -28,12 +27,41 @@ export default function HabitsPage() {
   }
 
   const handleAddButton = () => {
-    setShowBox(true);
+    setHabits((prevHabits) => [...prevHabits, { name: '', days: [] }]);
   };
 
-  const handleSaveButton = () => {
-    setShowBox(false);
-    setSavedHabit(true);
+  const handleSaveButton = async (index) => {
+    const habitName = document.getElementById(`habitName${index}`).value;
+    const days = Object.keys(selectedDays).filter((day) => selectedDays[day]);
+    const habitData = {
+      name: habitName,
+      days: days.map((day) => parseInt(day)),
+    };
+    const token = user.token;
+
+    try {
+      const response = await fetch(
+        'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(habitData),
+        }
+      );
+
+      if (response.ok) {
+        const updatedHabits = [...habits];
+        updatedHabits[index].name = habitName;
+        setHabits(updatedHabits);
+      } else {
+        throw new Error('Erro ao salvar hábito');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar hábito:', error);
+    }
   };
 
   useEffect(() => {
@@ -54,14 +82,14 @@ export default function HabitsPage() {
           <p>Meus hábitos</p>
           <button onClick={handleAddButton}>+</button>
         </TitleContainer>
-        {showBox && (
-          <BoxContainer>
-            <input placeholder="nome do hábito" />
+        {habits.map((habit, index) => (
+          <BoxContainer key={index}>
+            <input id={`habitName${index}`} placeholder="nome do hábito" />
             <DaysContainer>
               {Object.keys(selectedDays).map((day) => (
                 <DayButton
                   key={day}
-                  selected={selectedDays[day]}
+                  selected={habit.days[day]}
                   onClick={() => handleDayClick(day)}
                 >
                   {day[0]}
@@ -73,8 +101,8 @@ export default function HabitsPage() {
               <button onClick={handleSaveButton}>Salvar</button>
             </ButtonsContainer>
           </BoxContainer>
-        )}
-        {!savedHabit && (
+        ))}
+        {habits.length === 0 && (
           <p>
             Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
             começar a trackear!

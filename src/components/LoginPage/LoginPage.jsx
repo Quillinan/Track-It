@@ -2,33 +2,38 @@ import styled from 'styled-components';
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
+import PulseLoader from 'react-spinners/PulseLoader';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { user, login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegisterClick = () => {
     navigate('/cadastro');
   };
 
   const handleLoginClick = async () => {
+    setIsLoading(true);
+
     try {
       const response = await login(email, password);
-
       if (response.ok) {
         navigate('/habitos');
       } else {
-        console.error('Erro ao fazer login:', response.error);
+        alert('Usuário ou senha inválidos');
       }
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      alert('Erro ao fazer login: ' + error.message);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && user.ok) {
       navigate('/habitos');
     }
   }, [user, navigate]);
@@ -36,7 +41,7 @@ export default function LoginPage() {
   return (
     <PageContainer>
       <img src={'Logo.svg'} alt="logo" />
-      <FormContainer>
+      <FormContainer disabled={isLoading}>
         <input
           placeholder="email"
           value={email}
@@ -47,7 +52,9 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLoginClick}>Entrar</button>
+        <button onClick={handleLoginClick}>
+          {isLoading ? <PulseLoader color="#FFFFFF" size={13} /> : 'Entrar'}
+        </button>
         <p onClick={handleRegisterClick}>Não tem uma conta? Cadastre-se!</p>
       </FormContainer>
     </PageContainer>
@@ -78,10 +85,12 @@ const FormContainer = styled.div`
   flex-direction: column;
   margin: 32px 0;
   font-size: 14px;
-  align-items: center button {
+  align-items: center;
+  button {
     width: calc(100vw - 50px);
   }
   input {
     width: calc(100vw - 70px);
+    background: ${(props) => (props.disabled ? '#F2F2F2' : '#FFFFFF')};
   }
 `;

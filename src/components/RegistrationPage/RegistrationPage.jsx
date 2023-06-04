@@ -15,15 +15,6 @@ export default function RegistrationPage() {
     navigate('/');
   };
 
-  console.log(
-    JSON.stringify({
-      email: `${email}`,
-      name: `${name}`,
-      image: `${image}`,
-      password: `${password}`,
-    })
-  );
-
   const handleRegistrationClick = async () => {
     try {
       const response = await fetch(

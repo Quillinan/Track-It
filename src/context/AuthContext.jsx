@@ -27,18 +27,19 @@ export function AuthProvider({ children }) {
 
       if (response.ok) {
         const data = await response.json();
-
+        setIsLoading(false);
         setUser(data);
+        return { ok: true, data };
       } else {
-        throw new Error('Erro ao fazer login');
+        setIsLoading(false);
+        return { ok: false };
       }
     } catch (error) {
       console.error('Erro ao fazer login:', error);
+      setIsLoading(false);
+      throw error;
     }
-
-    setIsLoading(false);
   };
-
   // Função para fazer logout do usuário
   const logout = () => {
     setUser(null);
