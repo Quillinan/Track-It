@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import { useContext, useState, useEffect, useCallback } from 'react';
-import NavBar from '../NavBar/NavBar';
-import Footer from '../Footer/footer';
-import AuthContext from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components";
+import { useContext, useState, useEffect, useCallback } from "react";
+import NavBar from "../NavBar/NavBar";
+import Footer from "../Footer/footer";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function HabitsPage() {
   const [selectedDays, setSelectedDays] = useState({
@@ -15,7 +15,7 @@ export default function HabitsPage() {
     Sábado: false,
     Domingo: false,
   });
-  const [habitNameInput, setHabitNameInput] = useState('');
+  const [habitNameInput, setHabitNameInput] = useState("");
   const [habits, setHabits] = useState([]);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export default function HabitsPage() {
   const token = user.token;
   const [isBoxContainerVisible, setIsBoxContainerVisible] = useState(false);
   const DiasdaSemana = [
-    'Segunda',
-    'Terça',
-    'Quarta',
-    'Quinta',
-    'Sexta',
-    'Sábado',
-    'Domingo',
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+    "Domingo",
   ];
 
   function handleDayClick(day) {
@@ -49,19 +49,19 @@ export default function HabitsPage() {
       .filter((day) => selectedDays[day])
       .map((day) => {
         switch (day) {
-          case 'Segunda':
+          case "Segunda":
             return 1;
-          case 'Terça':
+          case "Terça":
             return 2;
-          case 'Quarta':
+          case "Quarta":
             return 3;
-          case 'Quinta':
+          case "Quinta":
             return 4;
-          case 'Sexta':
+          case "Sexta":
             return 5;
-          case 'Sábado':
+          case "Sábado":
             return 6;
-          case 'Domingo':
+          case "Domingo":
             return 7;
           default:
             return null;
@@ -76,11 +76,11 @@ export default function HabitsPage() {
 
     try {
       const response = await fetch(
-        'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(habitData),
@@ -93,8 +93,9 @@ export default function HabitsPage() {
           ...habits,
           { id: data.id, name: habitNameInput, days: days },
         ];
+        setIsBoxContainerVisible(false);
         setHabits(updatedHabits);
-        setHabitNameInput('');
+        setHabitNameInput("");
 
         const clearedSelectedDays = { ...selectedDays };
         Object.keys(clearedSelectedDays).forEach((day) => {
@@ -102,10 +103,10 @@ export default function HabitsPage() {
         });
         setSelectedDays(clearedSelectedDays);
       } else {
-        throw new Error('Erro ao salvar hábito');
+        throw new Error("Erro ao salvar hábito");
       }
     } catch (error) {
-      console.error('Erro ao salvar hábito:', error);
+      console.error("Erro ao salvar hábito:", error);
     }
   };
 
@@ -117,7 +118,7 @@ export default function HabitsPage() {
   const fetchHabits = useCallback(async () => {
     try {
       const response = await fetch(
-        'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits',
+        "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
         {
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -130,16 +131,40 @@ export default function HabitsPage() {
         setHabits(data);
         setHasLoadedData(true);
       } else {
-        throw new Error('Erro ao carregar hábitos');
+        throw new Error("Erro ao carregar hábitos");
       }
     } catch (error) {
-      console.error('Erro ao carregar hábitos:', error);
+      console.error("Erro ao carregar hábitos:", error);
     }
   }, [user.token]);
 
+  const handleDeleteHabit = async (habitId) => {
+    try {
+      const response = await fetch(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const updatedHabits = habits.filter((habit) => habit.id !== habitId);
+        setHabits(updatedHabits);
+      } else {
+        throw new Error("Erro ao excluir hábito");
+      }
+    } catch (error) {
+      console.error("Erro ao excluir hábito:", error);
+    }
+  };
+
   useEffect(() => {
     if (!user) {
-      navigate('/');
+      navigate("/");
     } else if (!hasLoadedData) {
       (async () => {
         await fetchHabits();
@@ -168,8 +193,7 @@ export default function HabitsPage() {
                 <DayButton
                   key={day}
                   selected={selectedDays[day]}
-                  onClick={() => handleDayClick(day)}
-                >
+                  onClick={() => handleDayClick(day)}>
                   {day[0]}
                 </DayButton>
               ))}
@@ -191,9 +215,9 @@ export default function HabitsPage() {
             {habits.map((habit) => (
               <HabitBoxContainer key={habit.id}>
                 <img
-                  src={'trashicon.svg'}
+                  src={"trashicon.svg"}
                   alt="icon"
-                  // onClick={() => handleDeleteHabit(habit.id)}
+                  onClick={() => handleDeleteHabit(habit.id)}
                 />
                 <p>{habit.name}</p>
                 <DaysContainer>
@@ -201,8 +225,7 @@ export default function HabitsPage() {
                     <DayButton
                       key={index}
                       disabled={habit.days.includes(index + 1)}
-                      selected={habit.days.includes(index + 1)}
-                    >
+                      selected={habit.days.includes(index + 1)}>
                       {day[0]}
                     </DayButton>
                   ))}
@@ -222,7 +245,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   font-style: normal;
   font-size: 18px;
   background: #f2f2f2;
@@ -279,9 +302,9 @@ const DayButton = styled.button`
   width: 30px;
   height: 30px;
   border-radius: 5px;
-  background-color: ${(props) => (props.selected ? '#CFCFCF' : '#FFFFFF')};
-  border: 1px solid ${(props) => (props.selected ? '#CFCFCF' : '#D4D4D4')};
-  color: ${(props) => (props.selected ? '#FFFFFF' : '#DBDBDB')};
+  background-color: ${(props) => (props.selected ? "#CFCFCF" : "#FFFFFF")};
+  border: 1px solid ${(props) => (props.selected ? "#CFCFCF" : "#D4D4D4")};
+  color: ${(props) => (props.selected ? "#FFFFFF" : "#DBDBDB")};
   font-size: 20px;
   cursor: pointer;
 `;
