@@ -66,7 +66,7 @@ export default function TodayPage() {
   }, [user, token, navigate]);
 
   if (!habitData) {
-    return null; // Adicione um retorno nulo ou uma mensagem de carregamento enquanto os dados do hábito estão sendo buscados
+    return null;
   }
 
   return (
@@ -74,16 +74,28 @@ export default function TodayPage() {
       <NavBar />
       <PageContainer>
         <TitleContainer>
-          <Title>Segunda, 17/05</Title>
-          <Subtitle>Nenhum hábito concluído ainda</Subtitle>
+          <Title data-test="today">Segunda, 17/05</Title>
+          <Subtitle data-test="today-counter">
+            Nenhum hábito concluído ainda
+          </Subtitle>
         </TitleContainer>
-        <BoxContainer>
+        <BoxContainer data-test="today-habit-container">
           <TextContainer>
-            <div className="habit-name">{habitData.name}</div>
-            <p>Sequência atual: {habitData.currentSequence} dias</p>
-            <p>Seu recorde: {habitData.highestSequence} dias</p>
+            <div data-test="today-habit-name" className="habit-name">
+              {habitData.name}
+            </div>
+            <p data-test="today-habit-sequence">
+              Sequência atual: {habitData.currentSequence} dias
+            </p>
+            <p data-test="today-habit-record">
+              Seu recorde: {habitData.highestSequence} dias
+            </p>
           </TextContainer>
-          <CheckContainer completed={habitCompleted} onClick={handleCheckClick}>
+          <CheckContainer
+            data-test="today-habit-check-btn"
+            completed={habitCompleted}
+            onClick={handleCheckClick}
+          >
             <img src={'checkmark.svg'} alt="icon" />
           </CheckContainer>
         </BoxContainer>

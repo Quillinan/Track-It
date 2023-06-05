@@ -18,11 +18,17 @@ export default function Footer() {
 
   return (
     <StyledFooter>
-      <p onClick={handleHabitsClick}>Hábitos</p>
+      <p data-test="habit-link" onClick={handleHabitsClick}>
+        Hábitos
+      </p>
       <Circle>
-        <p onClick={handleTodayClick}>Hoje</p>
+        <p data-test="today-link" onClick={handleTodayClick}>
+          Hoje
+        </p>
       </Circle>
-      <p onClick={handleHistoryClick}>Histórico</p>
+      <p data-test="history-link" onClick={handleHistoryClick}>
+        Histórico
+      </p>
     </StyledFooter>
   );
 }

@@ -49,28 +49,36 @@ export default function RegistrationPage() {
       <img src={'Logo.svg'} alt="logo" />
       <FormContainer>
         <input
+          data-test="email-input"
           placeholder="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          data-test="password-input"
           placeholder="senha"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
+          data-test="user-name-input"
           placeholder="nome"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
+          data-test="user-image-input"
           placeholder="foto"
           value={image}
           onChange={(e) => setImage(e.target.value)}
         />
-        <button onClick={handleRegistrationClick}>Cadastrar</button>
-        <p onClick={handleLoginClick}>Já tem uma conta? Faça login!</p>
+        <button data-test="signup-btn" onClick={handleRegistrationClick}>
+          Cadastrar
+        </button>
+        <p data-test="login-link" onClick={handleLoginClick}>
+          Já tem uma conta? Faça login!
+        </p>
       </FormContainer>
     </PageContainer>
   );

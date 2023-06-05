@@ -43,19 +43,23 @@ export default function LoginPage() {
       <img src={'Logo.svg'} alt="logo" />
       <FormContainer disabled={isLoading}>
         <input
+          data-test="email-input"
           placeholder="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          data-test="password-input"
           placeholder="senha"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLoginClick}>
+        <button data-test="login-btn" onClick={handleLoginClick}>
           {isLoading ? <PulseLoader color="#FFFFFF" size={13} /> : 'Entrar'}
         </button>
-        <p onClick={handleRegisterClick}>Não tem uma conta? Cadastre-se!</p>
+        <p data-test="signup-link" onClick={handleRegisterClick}>
+          Não tem uma conta? Cadastre-se!
+        </p>
       </FormContainer>
     </PageContainer>
   );

@@ -8,7 +8,9 @@ export default function NavBar() {
   return (
     <StyledNavContainer>
       <p>TrackIt</p>
-      {user && <ProfileImage src={user.image} alt="Profile Icon" />}
+      {user && (
+        <ProfileImage data-test="avatar" src={user.image} alt="Profile Icon" />
+      )}
     </StyledNavContainer>
   );
 }
