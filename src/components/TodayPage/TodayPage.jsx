@@ -4,12 +4,16 @@ import Footer from '../Footer/footer';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 export default function TodayPage() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [habitData, setHabitData] = useState(null);
   const token = user.token;
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, 'EEEE, dd/MM', { locale: ptBR });
   const [habitCompleted, setHabitCompleted] = useState(false);
 
   const handleCheckClick = async () => {
@@ -26,7 +30,7 @@ export default function TodayPage() {
       );
 
       if (response.ok) {
-        setHabitCompleted(true);
+        setHabitCompleted(!habitData.done);
       } else if (response.status === 400) {
         throw new Error('Erro ao concluir hábito');
       }
@@ -74,7 +78,7 @@ export default function TodayPage() {
       <NavBar />
       <PageContainer>
         <TitleContainer>
-          <Title data-test="today">Segunda, 17/05</Title>
+          <Title data-test="today">{formattedDate}</Title>
           <Subtitle data-test="today-counter">
             Nenhum hábito concluído ainda
           </Subtitle>
@@ -93,7 +97,7 @@ export default function TodayPage() {
           </TextContainer>
           <CheckContainer
             data-test="today-habit-check-btn"
-            completed={habitCompleted}
+            done={habitData.done}
             onClick={handleCheckClick}
           >
             <img src={'checkmark.svg'} alt="icon" />
@@ -177,5 +181,5 @@ const CheckContainer = styled.div`
   width: 69px;
   height: 69px;
   margin-right: 15px;
-  background-color: ${({ completed }) => (completed ? '#8FC549' : '#EBEBEB')};
+  background-color: ${({ done }) => (done ? '#8FC549' : '#EBEBEB')};
 `;
