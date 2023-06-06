@@ -14,7 +14,6 @@ export default function TodayPage() {
   const token = user.token;
   const currentDate = new Date();
   const formattedDate = format(currentDate, 'EEEE, dd/MM', { locale: ptBR });
-  const [habitCompleted, setHabitCompleted] = useState(false);
 
   const handleCheckClick = async () => {
     try {
@@ -30,7 +29,7 @@ export default function TodayPage() {
       );
 
       if (response.ok) {
-        setHabitCompleted(!habitData.done);
+        setHabitData(!habitData.done);
       } else if (response.status === 400) {
         throw new Error('Erro ao concluir hábito');
       }
