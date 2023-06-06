@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useContext, useState, useEffect, useCallback } from 'react';
 import NavBar from '../NavBar/NavBar';
-import Footer from '../Footer/footer';
+import Footer from '../Footer/Footer';
 import AuthContext from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
