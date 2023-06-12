@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import NavBar from '../NavBar/NavBar';
-import Footer from '../Footer/Footer';
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import styled from "styled-components";
+import NavBar from "../NavBar/NavBar";
+import Footer from "../Footer/Footer";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function TodayPage() {
   const { user } = useContext(AuthContext);
@@ -13,16 +13,17 @@ export default function TodayPage() {
   const [habitData, setHabitData] = useState(null);
   const token = user.token;
   const currentDate = new Date();
-  const formattedDate = format(currentDate, 'EEEE, dd/MM', { locale: ptBR });
+  const DateptBR = format(currentDate, "EEEE, dd/MM", { locale: ptBR });
+  const formattedDate = DateptBR.charAt(0).toUpperCase() + DateptBR.slice(1);
 
   const handleCheckClick = async () => {
     try {
       const response = await fetch(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitData.id}/check`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -31,10 +32,10 @@ export default function TodayPage() {
       if (response.ok) {
         setHabitData(!habitData.done);
       } else if (response.status === 400) {
-        throw new Error('Erro ao concluir hábito');
+        throw new Error("Erro ao concluir hábito");
       }
     } catch (error) {
-      console.error('Erro ao concluir hábito:', error);
+      console.error("Erro ao concluir hábito:", error);
     }
   };
 
@@ -42,7 +43,7 @@ export default function TodayPage() {
     const fetchHabitData = async () => {
       try {
         const response = await fetch(
-          'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today',
+          "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -54,15 +55,15 @@ export default function TodayPage() {
           const data = await response.json();
           setHabitData(data[0]);
         } else {
-          throw new Error('Erro ao obter dados do hábito');
+          throw new Error("Erro ao obter dados do hábito");
         }
       } catch (error) {
-        console.error('Erro ao obter dados do hábito:', error);
+        console.error("Erro ao obter dados do hábito:", error);
       }
     };
 
     if (!user) {
-      navigate('/');
+      navigate("/");
     } else if (token) {
       fetchHabitData();
     }
@@ -97,9 +98,8 @@ export default function TodayPage() {
           <CheckContainer
             data-test="today-habit-check-btn"
             done={habitData.done}
-            onClick={handleCheckClick}
-          >
-            <img src={'checkmark.svg'} alt="icon" />
+            onClick={handleCheckClick}>
+            <img src={"checkmark.svg"} alt="icon" />
           </CheckContainer>
         </BoxContainer>
       </PageContainer>
@@ -109,27 +109,28 @@ export default function TodayPage() {
 }
 
 const PageContainer = styled.div`
-  height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   font-style: normal;
   font-size: 18px;
   background: #f2f2f2;
   color: #666666;
+  box-sizing: border-box;
   overflow-y: auto;
-  padding: 0 20px;
+  height: calc(100vh - 30px);
+  padding-top: 70px;
+  padding-bottom: 90px;
 `;
 
 const TitleContainer = styled.div`
-  width: 100%;
+  width: -webkit-fill-available;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  font-family: 'Lexend Deca';
+  margin: 30px 0;
+  font-family: "Lexend Deca";
 `;
 
 const Title = styled.p`
@@ -137,12 +138,14 @@ const Title = styled.p`
   font-size: 23px;
   color: #126ba5;
   margin-bottom: 5px;
+  margin-left: 17px;
 `;
 
 const Subtitle = styled.p`
   font-style: normal;
   font-size: 18px;
   color: #bababa;
+  margin-left: 17px;
 `;
 
 const BoxContainer = styled.div`
@@ -150,8 +153,8 @@ const BoxContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  height: 95px;
+  width: 340px;
+  min-height: 94px;
   background-color: #ffffff;
   border-radius: 5px;
   margin-bottom: 30px;
@@ -180,5 +183,5 @@ const CheckContainer = styled.div`
   width: 69px;
   height: 69px;
   margin-right: 15px;
-  background-color: ${({ done }) => (done ? '#8FC549' : '#EBEBEB')};
+  background-color: ${({ done }) => (done ? "#8FC549" : "#EBEBEB")};
 `;

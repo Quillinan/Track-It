@@ -1,19 +1,19 @@
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
   const navigate = useNavigate();
 
   const handleHabitsClick = () => {
-    navigate('/habitos');
+    navigate("/habitos");
   };
 
   const handleTodayClick = () => {
-    navigate('/hoje');
+    navigate("/hoje");
   };
 
   const handleHistoryClick = () => {
-    navigate('/historico');
+    navigate("/historico");
   };
 
   return (
@@ -34,7 +34,7 @@ export default function Footer() {
 }
 
 const StyledFooter = styled.div`
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   font-style: normal;
   font-size: 18px;
   width: 375px;
@@ -43,7 +43,10 @@ const StyledFooter = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  background: #ffffff;
   color: #52b6ff;
+  position: fixed;
+  bottom: 0px;
 `;
 
 const Circle = styled.div`
