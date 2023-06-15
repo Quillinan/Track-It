@@ -1,35 +1,38 @@
-import styled from 'styled-components';
-import NavBar from '../NavBar/NavBar';
-import Footer from '../Footer/Footer';
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import styled from "styled-components";
+import NavBar from "../NavBar/NavBar";
+import Footer from "../Footer/Footer";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function TodayPage() {
-  const { user } = useContext(AuthContext);
+  const { user, completedHabits, setCompletedHabits } = useContext(AuthContext);
   const navigate = useNavigate();
   const [habitData, setHabitData] = useState(null);
   const token = user.token;
   const currentDate = new Date();
-  const DateptBR = format(currentDate, 'EEEE, dd/MM', { locale: ptBR });
+  const DateptBR = format(currentDate, "EEEE, dd/MM", { locale: ptBR });
   const formattedDate = DateptBR.charAt(0).toUpperCase() + DateptBR.slice(1);
   const totalHabits = habitData ? habitData.length : 0;
-  const completedHabits = habitData
+  const totalCompletedHabits = habitData
     ? habitData.filter((habit) => habit.done).length
     : 0;
+
   const percentCompleted =
-    totalHabits > 0 ? Math.round((completedHabits / totalHabits) * 100) : 0;
+    totalHabits > 0
+      ? Math.round((totalCompletedHabits / totalHabits) * 100)
+      : 0;
 
   const handleCheckClick = async (habitId) => {
     try {
       const response = await fetch(
         `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/check`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -37,24 +40,31 @@ export default function TodayPage() {
 
       if (response.ok) {
         setHabitData((prevHabitData) => {
-          return prevHabitData.map((habit) => {
+          const updatedHabitData = prevHabitData.map((habit) => {
             if (habit.id === habitId) {
               return { ...habit, done: !habit.done };
             }
             return habit;
           });
+
+          const totalCompleted = updatedHabitData.filter(
+            (habit) => habit.done
+          ).length;
+          setCompletedHabits(totalCompleted);
+
+          return updatedHabitData;
         });
       } else if (response.status === 400) {
-        throw new Error('Erro ao concluir hábito');
+        throw new Error("Erro ao concluir hábito");
       }
     } catch (error) {
-      console.error('Erro ao concluir hábito:', error);
+      console.error("Erro ao concluir hábito:", error);
     }
   };
 
-  let counterText = 'Nenhum hábito concluído ainda';
+  let counterText = "Nenhum hábito concluído ainda";
 
-  if (completedHabits > 0) {
+  if (totalCompletedHabits > 0) {
     counterText = `${percentCompleted}% dos hábitos concluídos`;
   }
 
@@ -62,7 +72,7 @@ export default function TodayPage() {
     const fetchHabitData = async () => {
       try {
         const response = await fetch(
-          'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today',
+          "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -75,15 +85,15 @@ export default function TodayPage() {
           console.log(data);
           setHabitData(data);
         } else {
-          throw new Error('Erro ao obter dados do hábito');
+          throw new Error("Erro ao obter dados do hábito");
         }
       } catch (error) {
-        console.error('Erro ao obter dados do hábito:', error);
+        console.error("Erro ao obter dados do hábito:", error);
       }
     };
 
     if (!user) {
-      navigate('/');
+      navigate("/");
     } else if (token) {
       fetchHabitData();
     }
@@ -101,8 +111,7 @@ export default function TodayPage() {
           <Title data-test="today">{formattedDate}</Title>
           <Subtitle
             data-test="today-counter"
-            className={completedHabits > 0 ? 'green-text' : ''}
-          >
+            className={completedHabits > 0 ? "green-text" : ""}>
             {counterText}
           </Subtitle>
         </TitleContainer>
@@ -114,14 +123,14 @@ export default function TodayPage() {
               </div>
               <div className="line">
                 <p data-test="today-habit-sequence">Sequência atual:</p>
-                <p className={habit.done ? 'habit done' : 'habit'}>
+                <p className={habit.done ? "habit done" : "habit"}>
                   {habit.currentSequence} dias
                 </p>
               </div>
 
               <div className="line">
                 <p data-test="today-habit-record">Seu recorde:</p>
-                <p className={habit.done ? 'habit done' : 'habit'}>
+                <p className={habit.done ? "habit done" : "habit"}>
                   {habit.highestSequence} dias
                 </p>
               </div>
@@ -129,9 +138,8 @@ export default function TodayPage() {
             <CheckContainer
               data-test="today-habit-check-btn"
               done={habit.done}
-              onClick={() => handleCheckClick(habit.id)}
-            >
-              <img src={'checkmark.svg'} alt="icon" />
+              onClick={() => handleCheckClick(habit.id)}>
+              <img src={"checkmark.svg"} alt="icon" />
             </CheckContainer>
           </BoxContainer>
         ))}
@@ -145,7 +153,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   font-style: normal;
   font-size: 18px;
   background: #f2f2f2;
@@ -163,7 +171,7 @@ const TitleContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin: 30px 0;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   .green-text {
     color: #8fc549;
   }
@@ -232,5 +240,5 @@ const CheckContainer = styled.div`
   border-radius: 5px;
   width: 69px;
   height: 69px;
-  background-color: ${({ done }) => (done ? '#8FC549' : '#EBEBEB')};
+  background-color: ${({ done }) => (done ? "#8FC549" : "#EBEBEB")};
 `;
