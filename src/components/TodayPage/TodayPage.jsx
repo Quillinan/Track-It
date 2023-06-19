@@ -25,18 +25,19 @@ export default function TodayPage() {
       ? Math.round((totalCompletedHabits / totalHabits) * 100)
       : 0;
 
-  const handleCheckClick = async (habitId) => {
+  const handleCheckClick = async (habitId, isDone) => {
     try {
-      const response = await fetch(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/check`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const method = "POST";
+      const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}
+      ${isDone ? "/uncheck" : "/check"}`;
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
         setHabitData((prevHabitData) => {
@@ -138,7 +139,7 @@ export default function TodayPage() {
             <CheckContainer
               data-test="today-habit-check-btn"
               done={habit.done}
-              onClick={() => handleCheckClick(habit.id)}>
+              onClick={() => handleCheckClick(habit.id, habit.done)}>
               <img src={"checkmark.svg"} alt="icon" />
             </CheckContainer>
           </BoxContainer>
