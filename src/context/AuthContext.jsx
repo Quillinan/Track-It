@@ -8,6 +8,10 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [completedHabits, setCompletedHabits] = useState(0);
 
+  const updateCompletedHabits = (totalCompleted) => {
+    setCompletedHabits(totalCompleted);
+  };
+
   const login = async (email, password) => {
     setIsLoading(true);
 
@@ -55,6 +59,7 @@ export function AuthProvider({ children }) {
         logout,
         completedHabits,
         setCompletedHabits,
+        updateCompletedHabits,
       }}>
       {children}
     </AuthContext.Provider>

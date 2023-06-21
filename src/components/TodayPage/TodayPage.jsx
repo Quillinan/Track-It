@@ -8,7 +8,8 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export default function TodayPage() {
-  const { user, completedHabits, setCompletedHabits } = useContext(AuthContext);
+  const { user, completedHabits, updateCompletedHabits } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const [habitData, setHabitData] = useState(null);
   const token = user.token;
@@ -51,7 +52,7 @@ export default function TodayPage() {
           const totalCompleted = updatedHabitData.filter(
             (habit) => habit.done
           ).length;
-          setCompletedHabits(totalCompleted);
+          updateCompletedHabits(totalCompleted);
 
           return updatedHabitData;
         });
