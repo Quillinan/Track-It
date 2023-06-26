@@ -8,8 +8,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export default function TodayPage() {
-  const { user, completedHabits, updateCompletedHabits } =
-    useContext(AuthContext);
+  const { user, updateCompletedHabits } = useContext(AuthContext);
   const navigate = useNavigate();
   const [habitData, setHabitData] = useState(null);
   const token = user.token;
@@ -53,6 +52,7 @@ export default function TodayPage() {
             (habit) => habit.done
           ).length;
           updateCompletedHabits(totalCompleted);
+          user.percentCompleted = percentCompleted;
 
           return updatedHabitData;
         });
@@ -67,7 +67,7 @@ export default function TodayPage() {
   let counterText = "Nenhum hábito concluído ainda";
 
   if (totalCompletedHabits > 0) {
-    counterText = `${percentCompleted}% dos hábitos concluídos`;
+    counterText = `${user.percentCompleted}% dos hábitos concluídos`;
   }
 
   useEffect(() => {
@@ -96,10 +96,21 @@ export default function TodayPage() {
 
     if (!user) {
       navigate("/");
-    } else if (token) {
+    } else if (token && !habitData) {
       fetchHabitData();
     }
-  }, [user, token, navigate]);
+
+    // Atualização do percentCompleted quando o botão de check for clicado
+    if (habitData && totalHabits > 0) {
+      const totalCompletedHabits = habitData.filter(
+        (habit) => habit.done
+      ).length;
+      const percentCompleted = Math.round(
+        (totalCompletedHabits / totalHabits) * 100
+      );
+      user.percentCompleted = percentCompleted;
+    }
+  }, [user, token, navigate, habitData, totalHabits]);
 
   if (!habitData) {
     return null;
@@ -113,7 +124,7 @@ export default function TodayPage() {
           <Title data-test="today">{formattedDate}</Title>
           <Subtitle
             data-test="today-counter"
-            className={completedHabits > 0 ? "green-text" : ""}>
+            className={user.percentCompleted > 0 ? "green-text" : ""}>
             {counterText}
           </Subtitle>
         </TitleContainer>
@@ -164,7 +175,7 @@ const PageContainer = styled.div`
   overflow-y: auto;
   height: calc(100vh - 30px);
   padding-top: 70px;
-  padding-bottom: 90px;
+  padding-bottom: 70px;
 `;
 
 const TitleContainer = styled.div`

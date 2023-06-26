@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import AuthContext from "../../context/AuthContext";
+import { useContext } from "react";
 
 export default function Footer() {
+  const { user } = useContext(AuthContext);
+  const percentage = user.percentCompleted;
   const navigate = useNavigate();
 
   const handleHabitsClick = () => {
@@ -9,6 +14,7 @@ export default function Footer() {
   };
 
   const handleTodayClick = () => {
+    console.log(user.percentCompleted);
     navigate("/hoje");
   };
 
@@ -21,10 +27,23 @@ export default function Footer() {
       <p data-test="habit-link" onClick={handleHabitsClick}>
         Hábitos
       </p>
-      <Circle>
-        <p data-test="today-link" onClick={handleTodayClick}>
+      <Circle onClick={handleTodayClick}>
+        {/* <p data-test="today-link" onClick={handleTodayClick}>
           Hoje
-        </p>
+        </p> */}
+        <CircularProgressbar
+          onClick={handleTodayClick}
+          value={percentage}
+          text={"Hoje"}
+          styles={buildStyles({
+            textSize: "18px",
+            pathTransitionDuration: 0.5,
+            pathColor: `(, ${percentage / 100})`,
+            textColor: "#ffffff",
+            trailColor: "#ffffff",
+            backgroundColor: "#52b6ff",
+          })}
+        />
       </Circle>
       <p data-test="history-link" onClick={handleHistoryClick}>
         Histórico
