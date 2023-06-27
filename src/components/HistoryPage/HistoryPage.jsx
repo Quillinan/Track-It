@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import NavBar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 export default function HistoryPage() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [value, onChange] = useState(new Date());
 
   useEffect(() => {
     if (!user) {
@@ -24,9 +27,9 @@ export default function HistoryPage() {
       <NavBar />
       <PageContainer>
         <TitleContainer>
-          <Title>Segunda, 17/05</Title>
+          <Title>Histórico</Title>
         </TitleContainer>
-        <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
+        <StyledCalendar onChange={onChange} value={value} />
       </PageContainer>
       <Footer />
     </div>
@@ -54,7 +57,7 @@ const TitleContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   font-family: "Lexend Deca";
 `;
 
@@ -62,4 +65,8 @@ const Title = styled.p`
   font-style: normal;
   font-size: 23px;
   color: #126ba5;
+`;
+
+const StyledCalendar = styled(Calendar)`
+  border-radius: 10px;
 `;
