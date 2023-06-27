@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import NavBar from '../NavBar/NavBar';
-import Footer from '../Footer/Footer';
-import { useContext, useEffect } from 'react';
-import AuthContext from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components";
+import NavBar from "../NavBar/NavBar";
+import Footer from "../Footer/Footer";
+import { useContext, useEffect } from "react";
+import AuthContext from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function HistoryPage() {
   const { user } = useContext(AuthContext);
@@ -11,7 +11,7 @@ export default function HistoryPage() {
 
   useEffect(() => {
     if (!user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, navigate]);
 
@@ -34,17 +34,18 @@ export default function HistoryPage() {
 }
 
 const PageContainer = styled.div`
-  height: calc(100vh - 140px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
   font-style: normal;
   font-size: 18px;
   background: #f2f2f2;
   color: #666666;
+  box-sizing: border-box;
   overflow-y: auto;
-  padding: 0 20px;
+  height: calc(100vh - 30px);
+  padding: 70px 17px;
 `;
 
 const TitleContainer = styled.div`
@@ -54,7 +55,7 @@ const TitleContainer = styled.div`
   justify-content: flex-start;
   margin-top: 30px;
   margin-bottom: 30px;
-  font-family: 'Lexend Deca';
+  font-family: "Lexend Deca";
 `;
 
 const Title = styled.p`

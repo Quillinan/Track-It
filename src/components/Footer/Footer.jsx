@@ -1,12 +1,9 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import AuthContext from "../../context/AuthContext";
-import { useContext } from "react";
+import "react-circular-progressbar/dist/styles.css";
 
-export default function Footer() {
-  const { user } = useContext(AuthContext);
-  const percentage = user.percentCompleted;
+export default function Footer({ percentCompleted }) {
   const navigate = useNavigate();
 
   const handleHabitsClick = () => {
@@ -14,7 +11,6 @@ export default function Footer() {
   };
 
   const handleTodayClick = () => {
-    console.log(user.percentCompleted);
     navigate("/hoje");
   };
 
@@ -27,24 +23,21 @@ export default function Footer() {
       <p data-test="habit-link" onClick={handleHabitsClick}>
         Hábitos
       </p>
-      <Circle onClick={handleTodayClick}>
-        {/* <p data-test="today-link" onClick={handleTodayClick}>
-          Hoje
-        </p> */}
+      <Circle data-test="today-link" onClick={handleTodayClick}>
         <CircularProgressbar
-          onClick={handleTodayClick}
-          value={percentage}
-          text={"Hoje"}
+          value={percentCompleted || 0}
+          text="Hoje"
+          background
+          backgroundPadding={6}
           styles={buildStyles({
-            textSize: "18px",
-            pathTransitionDuration: 0.5,
-            pathColor: `(, ${percentage / 100})`,
-            textColor: "#ffffff",
-            trailColor: "#ffffff",
             backgroundColor: "#52b6ff",
+            textColor: "#ffffff",
+            pathColor: "#ffffff",
+            trailColor: "transparent",
           })}
         />
       </Circle>
+
       <p data-test="history-link" onClick={handleHistoryClick}>
         Histórico
       </p>
@@ -72,10 +65,5 @@ const Circle = styled.div`
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #52b6ff;
-  color: #ffffff;
   margin-bottom: 50px;
 `;

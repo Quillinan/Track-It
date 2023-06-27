@@ -28,8 +28,9 @@ export default function TodayPage() {
   const handleCheckClick = async (habitId, isDone) => {
     try {
       const method = "POST";
-      const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}
-      ${isDone ? "/uncheck" : "/check"}`;
+      const url = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}${
+        isDone ? "/uncheck" : "/check"
+      }`;
 
       const response = await fetch(url, {
         method,
@@ -52,7 +53,6 @@ export default function TodayPage() {
             (habit) => habit.done
           ).length;
           updateCompletedHabits(totalCompleted);
-          user.percentCompleted = percentCompleted;
 
           return updatedHabitData;
         });
@@ -67,7 +67,7 @@ export default function TodayPage() {
   let counterText = "Nenhum hábito concluído ainda";
 
   if (totalCompletedHabits > 0) {
-    counterText = `${user.percentCompleted}% dos hábitos concluídos`;
+    counterText = `${percentCompleted}% dos hábitos concluídos`;
   }
 
   useEffect(() => {
@@ -99,18 +99,7 @@ export default function TodayPage() {
     } else if (token && !habitData) {
       fetchHabitData();
     }
-
-    // Atualização do percentCompleted quando o botão de check for clicado
-    if (habitData && totalHabits > 0) {
-      const totalCompletedHabits = habitData.filter(
-        (habit) => habit.done
-      ).length;
-      const percentCompleted = Math.round(
-        (totalCompletedHabits / totalHabits) * 100
-      );
-      user.percentCompleted = percentCompleted;
-    }
-  }, [user, token, navigate, habitData, totalHabits]);
+  }, [user, token, navigate, habitData]);
 
   if (!habitData) {
     return null;
@@ -124,7 +113,7 @@ export default function TodayPage() {
           <Title data-test="today">{formattedDate}</Title>
           <Subtitle
             data-test="today-counter"
-            className={user.percentCompleted > 0 ? "green-text" : ""}>
+            className={percentCompleted > 0 ? "green-text" : ""}>
             {counterText}
           </Subtitle>
         </TitleContainer>
